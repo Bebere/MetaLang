@@ -72,3 +72,11 @@
    try.cc:64:18: error:   expected a constant of type ‘int’, got ‘fac5 {aka meta_integer<120>}’
    try.cc:64:22: error: invalid type in declaration before ‘;’ token
    #+END_SRC
+
+
+** More Examples
+
+   ... can be found in =/samples/=, there are several interesting examples involving
+   currying, higher-order functions, compound datatypes and Y-combinators. you can
+   get a first impression about what the syntax looks like and what you can do with
+   metalang.
