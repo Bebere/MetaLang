@@ -1,0 +1,9 @@
+Group is
+		$/basis.cm
+		$/smlnj-lib.cm
+		$/ml-lpt-lib.cm
+
+		metalang.grm: ml-antlr
+		metalang.lex: ml-ulex
+		metalang_ast.sml
+		main.sml

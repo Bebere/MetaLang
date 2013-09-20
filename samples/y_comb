@@ -1,0 +1,11 @@
+val y_combinator = \(f) = 
+						(\(h) = (\(x) = (f(h(h)))(x)))(\(h) = (\(x) = (f(h(h)))(x)))
+
+val factorial = y_combinator(\(q) = (\(x) = if x = 0 then 1 else x * q(x-1)))
+
+val fac0 = factorial(0)
+val fac1 = factorial(1)
+val fac2 = factorial(2)
+val fac3 = factorial(3)
+val fac4 = factorial(4)
+val fac5 = factorial(5)

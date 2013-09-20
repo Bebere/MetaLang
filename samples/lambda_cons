@@ -1,0 +1,16 @@
+datatype nil
+
+fun cons (car, cdr) = 
+	fun part (i) = nil
+	       | (0) = car
+		   | (1) = cdr ;
+	part
+
+fun car (p) = p(0)
+fun cdr (p) = p(1)
+
+val lst = cons(1, cons(2, cons(3, cons(4, nil))))
+
+val lst0 = car(lst)
+val lst1 = car(cdr(lst))
+val lst2 = car(cdr(cdr(lst)))

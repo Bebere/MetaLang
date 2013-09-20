@@ -1,0 +1,30 @@
+datatype metalist of car * cdr
+datatype metanil
+
+
+fun meta_map (f, xs) = metalist (f(xs::car), 
+								 meta_map(f, xs::cdr))
+		   | (f, metanil) = metanil
+
+val lst = metalist(1, metalist(2, metalist(3, metalist(4, metanil))))
+val rslt = meta_map (\(x) = x * x, lst)
+
+
+fun factorial (x) = x * factorial(x - 1)
+            | (0) = 1
+
+
+val fac0 = factorial(0)
+val fac3 = factorial(3)
+val fac5 = factorial(5)
+
+
+fun fibonacci (n) = fibonacci(n - 1) + fibonacci(n - 2)
+            | (0) = 1
+            | (1) = 1
+
+fun fibotail (n, a,b) = fibotail(n - 1, a + b, a)
+           | (0, a,b) = b
+
+val fibo5 = fibonacci(5)
+val fibo6 = fibotail(6, 1,1)

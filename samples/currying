@@ -1,0 +1,18 @@
+datatype metalist of car * cdr
+datatype metanil
+
+fun meta_foldl (f, x, xs) = 
+	if (metanil? xs) then x
+	else 
+		meta_foldl(f, f(xs::car, x), xs::cdr)
+
+fun meta_sum (xs) = 
+	meta_foldl (\(x,y) = x + y, 0, xs)
+
+fun meta_prod (xs) = 
+	meta_foldl (\(x,y) = x * y, 1, xs)
+
+
+val lst0 = metalist(4, metalist(2, metalist(6, metalist(1, metanil))))
+val slst = meta_sum(lst0)
+val plst = meta_prod(lst0)

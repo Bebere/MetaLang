@@ -1,0 +1,12 @@
+val var = if 0 then 10 else 20
+val s = if \(x) = (var) then 
+			if 3 then var
+			else 
+				if \(k) = (\(g) = k) then \(l,m) = (\(n) = if l then m else n)
+				else \(x) = x
+		else 100
+
+val f = \(x,y) = if x then y else x
+
+
+val k = if not s then s + var + 10 else 10 + s

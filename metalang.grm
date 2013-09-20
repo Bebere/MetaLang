@@ -1,0 +1,134 @@
+%name MetaLang;
+
+
+%tokens : VarName of string 
+		| Number of int 
+		| Operator_QUERY of string 
+		| Keyword_fun ("fun") 
+		| Keyword_val ("val")
+		| Keyword_if ("if") 
+		| Keyword_then ("then") 
+		| Keyword_else ("else") 
+		| Keyword_datatype ("datatype") 
+		| Keyword_of ("of") 
+		| Operator_LAMBDA ("\\") | Operator_ALT ("|") | Operator_EQ ("=") |
+		Operator_AND ("and") | Operator_OR ("or") | Operator_NOT ("not") |
+		Operator_GT (">") | Operator_LT ("<") | Operator_GE (">=") | Operator_LE ("<=") | Operator_NEQ ("/=") |
+		Operator_MULT ("*") | Operator_ADD ("+") | Operator_SUB ("-") | Operator_DIV ("/") | Operator_MOD ("%") |
+		Operator_COMMA (",") | Operator_GET ("::") | 
+		Operator_LP ("(") | Operator_RP (")") |
+		SEMICOLON (";")
+;
+
+%keywords "fun", "val", "if", "then", "else", "datatype", "of";
+
+%defs (
+	structure AST = MetaLangAST;
+	fun apply_op expr sr =
+		List.foldl (fn ((f,x), y) => f(y,x)) expr sr
+);
+
+
+stmts : (statement)* ;
+
+statement
+	: (datatype_binding | val_binding | function_definition)
+	;
+
+datatype_binding
+	: "datatype" VarName ("of" member_list) ? => ( 
+			case SR of 
+				NONE    => AST.DatatypeBinding (VarName, [])
+			  | SOME ls => AST.DatatypeBinding (VarName, ls)
+		);
+	
+val_binding
+	: "val" VarName "=" expression => ( AST.ValBinding (VarName, expression) );
+
+function_definition
+	: "fun" VarName "(" expression_list ")" "=" compound_expression 
+			("|" "(" expression_list ")" "=" compound_expression 
+			  => (AST.FunDef (expression_list, compound_expression)) )*
+			=> ( AST.FunBinding (VarName, AST.FunDef(expression_list, compound_expression) :: SR) ) ;
+
+
+expression 
+	: logical_expression 
+	| "\\" "(" argument_list ")" "=" expression => ( AST.Lambda (argument_list, expression) )
+	| "if" expression "then" compound_expression "else" compound_expression => ( 
+			AST.IfThenElse (expression, compound_expression1, compound_expression2) ) ;
+
+compound_expression 
+	: ((statement)+ ";")? expression => (
+		case SR of 
+			NONE      => ( AST.CompoundExpr ([], expression) )
+		  | SOME decl => ( AST.CompoundExpr (decl, expression) ) );
+
+expression_list
+	: ( expression ("," expression)* => ( expression :: SR ) ) ? => (
+				case SR of 
+					 NONE    => []
+				   | SOME es => es
+				) ;
+
+argument_list
+	: ( VarName ("," VarName)* => ( VarName :: SR ) ) ? => (
+				case SR of
+					NONE    => []
+				  | SOME ss => ss
+				) ;
+
+member_list
+	: ( VarName ("*" VarName)* => ( VarName :: SR ) ) ? => (
+				case SR of
+					NONE    => []
+				  | SOME ss => ss
+				) ;
+
+
+logical_expression
+	: relative_expression ( "and" relative_expression => ( (AST.opAND, relative_expression) )
+						  | "or"  relative_expression => ( (AST.opOR,  relative_expression) ) )* 
+	=> ( apply_op relative_expression SR );
+
+relative_expression
+	: additive_expression ( "<"  additive_expression => ( (AST.opLT, additive_expression) )
+						  | ">"  additive_expression => ( (AST.opGT, additive_expression) )
+						  | "<=" additive_expression => ( (AST.opLE, additive_expression) )
+						  | ">=" additive_expression => ( (AST.opGE, additive_expression) )
+						  | "="  additive_expression => ( (AST.opEQ, additive_expression) ) 
+						  | "/=" additive_expression => ( (AST.opNE, additive_expression) ) )*
+	=> ( apply_op additive_expression SR );
+
+additive_expression
+	: multiplicative_expression ( "+" multiplicative_expression => ( (AST.opADD, multiplicative_expression) )
+								| "-" multiplicative_expression => ( (AST.opSUB, multiplicative_expression) ) )*
+	=> ( apply_op multiplicative_expression SR);
+
+multiplicative_expression
+	: unary_expression ( "*" unary_expression => ( (AST.opMUL, unary_expression) )
+					   | "/" unary_expression => ( (AST.opDIV, unary_expression) )
+					   | "%" unary_expression => ( (AST.opMOD, unary_expression) ) )*
+	=> ( apply_op unary_expression SR );
+	
+
+unary_expression
+    : "not" postfix_expression => ( AST.opNOT postfix_expression )
+    | "-" postfix_expression => ( AST.opNEG postfix_expression )
+	| Operator_QUERY postfix_expression => ( AST.opISA (Operator_QUERY, postfix_expression) )
+	| postfix_expression
+    ;
+
+postfix_expression
+    : primary_expression ( ("::" VarName)+ => ( List.foldl (fn (x,y) => AST.opMEM(y,x)) primary_expression SR )
+				         | "(" expression_list ")" => ( AST.Funcall (primary_expression, expression_list) ) ) ? => (
+		case SR of
+			NONE      => primary_expression
+		  | SOME expr => expr
+	);
+
+primary_expression 
+    : VarName => ( AST.Identifier VarName )
+    | Number  => ( AST.Integer Number )
+	| "(" expression ")"
+    ;

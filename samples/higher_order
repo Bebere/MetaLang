@@ -1,0 +1,34 @@
+datatype cons of car * cdr
+datatype nil
+
+
+fun map (f, xs) = cons(f(xs::car), map(f, xs::cdr))
+      | (f, nil) = nil
+
+fun foldl (f, init, xs) = foldl(f, f(xs::car, init), xs::cdr)
+        | (f, init, nil) = init
+
+fun foldr (f, x, xs) = f(xs::car, foldr(f, x, xs::cdr))
+        | (f, x, nil) = x
+
+fun filter (f, xs) = if f(xs::car) 
+					 then cons(xs::car, filter(f, xs::cdr))
+					 else filter(f, xs::cdr)
+         | (f, nil) = nil
+
+fun length (xs) = 1 + length(xs::cdr)
+         | (nil) = 0
+
+fun list_at (xs, i) = list_at(xs::cdr, i - 1) + 1
+          | (xs, 0) = xs::car
+
+fun append (xs, ys) = cons(xs::car, append(xs::cdr, ys))
+         | (nil, ys) = ys
+
+
+val xs = cons(3, cons(-2, cons(-5, cons(6, cons(-3, cons(2, nil))))))
+
+val ps = filter(\(x) = x > 0, xs)
+val s = foldr(\(x,y) = x + y, 0, xs)
+val as = append(xs, ps)
+val ms = map (\(x) = x > 0, xs)
