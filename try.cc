@@ -2,7 +2,7 @@
 #include "metalang.hpp"
 
 
-struct y_combinator {
+struct __lambda_0{
         template <typename f, typename _0>
         struct apply {
                 struct __lambda_1{
@@ -17,11 +17,21 @@ struct y_combinator {
                                 typedef __lambda_2 value;
                         };
                 };
-                typedef __lambda_1 g;
-                typedef typename g::template apply<g, __dummy_arg>::value value;
+                struct __lambda_2{
+                        template <typename h, typename _2>
+                        struct apply {
+                                struct __lambda_3{
+                                        template <typename x, typename _3>
+                                        struct apply {
+                                                typedef typename f::template apply<typename h::template apply<h, __dummy_arg>::value, __dummy_arg>::value::template apply<x, __dummy_arg>::value value;
+                                        };
+                                };
+                                typedef __lambda_3 value;
+                        };
+                };
+                typedef typename __lambda_1::template apply<__lambda_2, __dummy_arg>::value value;
         };
 };
-
 struct __lambda_1{
         template <typename q, typename _1>
         struct apply {
@@ -42,15 +52,23 @@ struct __lambda_1{
                 typedef __lambda_2 value;
         };
 };
-typedef y_combinator::apply<__lambda_1, __dummy_arg>::value factorial;
+typedef __lambda_0::apply<__lambda_1, __dummy_arg>::value factorial;
 
 typedef factorial::apply<meta_integer<0>, __dummy_arg>::value fac0;
+
 typedef factorial::apply<meta_integer<1>, __dummy_arg>::value fac1;
+
 typedef factorial::apply<meta_integer<2>, __dummy_arg>::value fac2;
+
 typedef factorial::apply<meta_integer<3>, __dummy_arg>::value fac3;
+
 typedef factorial::apply<meta_integer<4>, __dummy_arg>::value fac4;
+
 typedef factorial::apply<meta_integer<5>, __dummy_arg>::value fac5;
 
+
+// Passing metalang values as template parameters would cause a compile error, which would
+// dump the template parameter in deduced form
 template <int _>
 struct dump {};
 
