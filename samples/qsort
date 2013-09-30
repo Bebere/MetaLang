@@ -1,0 +1,24 @@
+datatype cons of car * cdr
+datatype nil
+
+
+fun append (xs, ys) = cons(xs::car, append(xs::cdr, ys))
+         | (nil, ys) = ys
+
+fun filter (f, xs) = if f(xs::car) 
+					 then cons(xs::car, filter(f, xs::cdr))
+					 else filter(f, xs::cdr)
+         | (f, nil) = nil
+
+fun qsort (xs) = 
+    val piv = xs::car
+    val rest = xs::cdr
+    val left = filter(\(x) = x <= piv, rest)
+    val right = filter(\(x) = x > piv, rest);
+    append(append(qsort(left), cons(piv, nil)),
+           qsort(right))
+    | (nil) = nil
+
+
+val xs = cons(3, cons(-2, cons(-5, cons(6, cons(-3, cons(2, nil))))))
+val ys = qsort(xs)
