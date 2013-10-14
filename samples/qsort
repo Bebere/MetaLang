@@ -6,8 +6,8 @@ fun append (xs, ys) = cons(xs::car, append(xs::cdr, ys))
          | (nil, ys) = ys
 
 fun filter (f, xs) = if f(xs::car) 
-					 then cons(xs::car, filter(f, xs::cdr))
-					 else filter(f, xs::cdr)
+                     then cons(xs::car, filter(f, xs::cdr))
+                     else filter(f, xs::cdr)
          | (f, nil) = nil
 
 fun qsort (xs) = 

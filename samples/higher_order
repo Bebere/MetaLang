@@ -12,8 +12,8 @@ fun foldr (f, x, xs) = f(xs::car, foldr(f, x, xs::cdr))
         | (f, x, nil) = x
 
 fun filter (f, xs) = if f(xs::car) 
-					 then cons(xs::car, filter(f, xs::cdr))
-					 else filter(f, xs::cdr)
+                     then cons(xs::car, filter(f, xs::cdr))
+                     else filter(f, xs::cdr)
          | (f, nil) = nil
 
 fun length (xs) = 1 + length(xs::cdr)

@@ -3,8 +3,8 @@ datatype metanil
 
 
 fun meta_map (f, xs) = metalist (f(xs::car), 
-								 meta_map(f, xs::cdr))
-		   | (f, metanil) = metanil
+                                 meta_map(f, xs::cdr))
+           | (f, metanil) = metanil
 
 val lst = metalist(1, metalist(2, metalist(3, metalist(4, metanil))))
 val rslt = meta_map (\(x) = x * x, lst)

@@ -1,10 +1,10 @@
 datatype nil
 
 fun cons (car, cdr) = 
-	fun part (i) = nil
-	       | (0) = car
-		   | (1) = cdr ;
-	part
+    fun part (i) = nil
+           | (0) = car
+           | (1) = cdr ;
+    part
 
 fun car (p) = p(0)
 fun cdr (p) = p(1)

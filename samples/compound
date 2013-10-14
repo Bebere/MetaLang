@@ -1,10 +1,10 @@
 fun complex_if_else (x, y) = 
-	if (x < y) then
-		val k = x + y
-		fun inc (n) = n + k ;
-		inc(k)
-	else
-		val s = x - y;
-		s
+    if (x < y) then
+        val k = x + y
+        fun inc (n) = n + k ;
+        inc(k)
+    else
+        val s = x - y;
+        s
 
 val result = complex_if_else (3, 5)

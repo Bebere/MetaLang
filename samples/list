@@ -2,31 +2,31 @@ datatype metalist of car * cdr
 datatype metanil
 
 fun meta_map (f, xs) = 
-	if (metanil? xs) then metanil
-	else metalist (f(xs::car), meta_map(f, xs::cdr))
+    if (metanil? xs) then metanil
+    else metalist (f(xs::car), meta_map(f, xs::cdr))
 
 fun meta_foldl (f, x, xs) = 
-	if (metanil? xs) then x
-	else 
-		meta_foldl(f, f(xs::car, x), xs::cdr)
+    if (metanil? xs) then x
+    else 
+        meta_foldl(f, f(xs::car, x), xs::cdr)
 
 fun meta_merge (xs, ys) = 
-	if (metanil? xs) then ys
-	else if (metanil? ys) then xs
-	else 
-		if (xs::car < ys::car) then metalist(xs::car, meta_merge(xs::cdr, ys))
-		else metalist(ys::car, meta_merge(xs, ys::cdr))
+    if (metanil? xs) then ys
+    else if (metanil? ys) then xs
+    else 
+        if (xs::car < ys::car) then metalist(xs::car, meta_merge(xs::cdr, ys))
+        else metalist(ys::car, meta_merge(xs, ys::cdr))
 
 fun insertion_sort (ls) = 
 
-		fun meta_insert (i, xs) = 
-			if (metanil? xs) then metalist(i, metanil)
-			else 
-				if (i < xs::car) then metalist(i, xs)
-				else metalist(xs::car, meta_insert(i, xs::cdr)) ;
+        fun meta_insert (i, xs) = 
+            if (metanil? xs) then metalist(i, metanil)
+            else 
+                if (i < xs::car) then metalist(i, xs)
+                else metalist(xs::car, meta_insert(i, xs::cdr)) ;
 
-		if (metanil? ls) then metanil
-		else meta_insert(ls::car, insertion_sort(ls::cdr))
+        if (metanil? ls) then metanil
+        else meta_insert(ls::car, insertion_sort(ls::cdr))
 
 
 val lst0 = metalist(4, metalist(2, metalist(6, metalist(1, metanil))))

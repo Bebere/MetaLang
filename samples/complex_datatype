@@ -3,18 +3,18 @@ datatype metanil
 
 
 fun meta_map (f, xs) = metalist (f(xs::car), 
-								 meta_map(f, xs::cdr))
-		   | (f, metanil) = metanil
+                                 meta_map(f, xs::cdr))
+           | (f, metanil) = metanil
 
 fun list_length (lst) = 1 + list_length(lst::cdr)
               | (metanil) = 0
 
 val lst = metalist(metalist(1, metalist(2, metalist(3, metanil))),
-				   metalist(metalist(1, metalist(2, metanil)),
-							metalist(metalist(1, metalist(2, metalist(3, metalist(4, metanil)))),
-									 metalist(metalist(1, metanil), metanil)
-									)
-						   )
-				  )
+                   metalist(metalist(1, metalist(2, metanil)),
+                            metalist(metalist(1, metalist(2, metalist(3, metalist(4, metanil)))),
+                                     metalist(metalist(1, metanil), metanil)
+                                    )
+                           )
+                  )
 
 val len = meta_map (list_length, lst)

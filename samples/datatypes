@@ -22,13 +22,13 @@ val k = \(x) = x * 2
 
 
 val typetraits = \(lst) = if ((metalist? lst) or (metanil? lst)) then 1 
-						  else if ((metatree? lst) or (metaleaf? lst)) then 2
-						  else 0
+                          else if ((metatree? lst) or (metaleaf? lst)) then 2
+                          else 0
 
 
 val tree = metatree(1, 
-					metatree(k, metaleaf, metaleaf),
-					metatree(lst, metaleaf, metaleaf))
+                    metatree(k, metaleaf, metaleaf),
+                    metatree(lst, metaleaf, metaleaf))
 
 val ty_lst  = typetraits(lst)
 val ty_tree = typetraits(tree)
