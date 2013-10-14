@@ -123,17 +123,17 @@ MetaLangTokens
     structure UserCode = struct
 
  
-	structure AST = MetaLangAST;
-	fun apply_op expr sr =
-		List.foldl (fn ((f,x), y) => f(y,x)) expr sr
+    structure AST = MetaLangAST;
+    fun apply_op expr sr =
+        List.foldl (fn ((f,x), y) => f(y,x)) expr sr
 
 
 fun datatype_binding_PROD_1_ACT (SR, VarName, Keyword_datatype, SR_SPAN : (Lex.pos * Lex.pos), VarName_SPAN : (Lex.pos * Lex.pos), Keyword_datatype_SPAN : (Lex.pos * Lex.pos), FULL_SPAN : (Lex.pos * Lex.pos)) = 
   (  
-			case SR of 
-				NONE    => AST.DatatypeBinding (VarName, [])
-			  | SOME ls => AST.DatatypeBinding (VarName, ls)
-		)
+            case SR of 
+                NONE    => AST.DatatypeBinding (VarName, [])
+              | SOME ls => AST.DatatypeBinding (VarName, ls)
+        )
 fun val_binding_PROD_1_ACT (expression, VarName, Operator_EQ, Keyword_val, expression_SPAN : (Lex.pos * Lex.pos), VarName_SPAN : (Lex.pos * Lex.pos), Operator_EQ_SPAN : (Lex.pos * Lex.pos), Keyword_val_SPAN : (Lex.pos * Lex.pos), FULL_SPAN : (Lex.pos * Lex.pos)) = 
   (  AST.ValBinding (VarName, expression) )
 fun function_definition_PROD_1_SUBRULE_1_PROD_1_ACT (VarName, Operator_EQ, Operator_LP, Operator_RP, Keyword_fun, compound_expression, Operator_ALT, expression_list, VarName_SPAN : (Lex.pos * Lex.pos), Operator_EQ_SPAN : (Lex.pos * Lex.pos), Operator_LP_SPAN : (Lex.pos * Lex.pos), Operator_RP_SPAN : (Lex.pos * Lex.pos), Keyword_fun_SPAN : (Lex.pos * Lex.pos), compound_expression_SPAN : (Lex.pos * Lex.pos), Operator_ALT_SPAN : (Lex.pos * Lex.pos), expression_list_SPAN : (Lex.pos * Lex.pos), FULL_SPAN : (Lex.pos * Lex.pos)) = 
@@ -144,36 +144,36 @@ fun expression_PROD_2_ACT (expression, argument_list, Operator_EQ, Operator_LP, 
   (  AST.Lambda (argument_list, expression) )
 fun expression_PROD_3_ACT (expression, compound_expression1, compound_expression2, Keyword_else, Keyword_then, Keyword_if, expression_SPAN : (Lex.pos * Lex.pos), compound_expression1_SPAN : (Lex.pos * Lex.pos), compound_expression2_SPAN : (Lex.pos * Lex.pos), Keyword_else_SPAN : (Lex.pos * Lex.pos), Keyword_then_SPAN : (Lex.pos * Lex.pos), Keyword_if_SPAN : (Lex.pos * Lex.pos), FULL_SPAN : (Lex.pos * Lex.pos)) = 
   (  
-			AST.IfThenElse (expression, compound_expression1, compound_expression2) )
+            AST.IfThenElse (expression, compound_expression1, compound_expression2) )
 fun compound_expression_PROD_1_ACT (SR, expression, SR_SPAN : (Lex.pos * Lex.pos), expression_SPAN : (Lex.pos * Lex.pos), FULL_SPAN : (Lex.pos * Lex.pos)) = 
   ( 
-		case SR of 
-			NONE      => ( AST.CompoundExpr ([], expression) )
-		  | SOME decl => ( AST.CompoundExpr (decl, expression) ) )
+        case SR of 
+            NONE      => ( AST.CompoundExpr ([], expression) )
+          | SOME decl => ( AST.CompoundExpr (decl, expression) ) )
 fun expression_list_PROD_1_SUBRULE_1_PROD_1_ACT (SR, expression, SR_SPAN : (Lex.pos * Lex.pos), expression_SPAN : (Lex.pos * Lex.pos), FULL_SPAN : (Lex.pos * Lex.pos)) = 
   (  expression :: SR )
 fun expression_list_PROD_1_ACT (SR, SR_SPAN : (Lex.pos * Lex.pos), FULL_SPAN : (Lex.pos * Lex.pos)) = 
   ( 
-				case SR of 
-					 NONE    => []
-				   | SOME es => es
-				)
+                case SR of 
+                     NONE    => []
+                   | SOME es => es
+                )
 fun argument_list_PROD_1_SUBRULE_1_PROD_1_ACT (SR, VarName, SR_SPAN : (Lex.pos * Lex.pos), VarName_SPAN : (Lex.pos * Lex.pos), FULL_SPAN : (Lex.pos * Lex.pos)) = 
   (  VarName :: SR )
 fun argument_list_PROD_1_ACT (SR, SR_SPAN : (Lex.pos * Lex.pos), FULL_SPAN : (Lex.pos * Lex.pos)) = 
   ( 
-				case SR of
-					NONE    => []
-				  | SOME ss => ss
-				)
+                case SR of
+                    NONE    => []
+                  | SOME ss => ss
+                )
 fun member_list_PROD_1_SUBRULE_1_PROD_1_ACT (SR, VarName, SR_SPAN : (Lex.pos * Lex.pos), VarName_SPAN : (Lex.pos * Lex.pos), FULL_SPAN : (Lex.pos * Lex.pos)) = 
   (  VarName :: SR )
 fun member_list_PROD_1_ACT (SR, SR_SPAN : (Lex.pos * Lex.pos), FULL_SPAN : (Lex.pos * Lex.pos)) = 
   ( 
-				case SR of
-					NONE    => []
-				  | SOME ss => ss
-				)
+                case SR of
+                    NONE    => []
+                  | SOME ss => ss
+                )
 fun logical_expression_PROD_1_SUBRULE_1_PROD_1_ACT (relative_expression, Operator_AND, relative_expression_SPAN : (Lex.pos * Lex.pos), Operator_AND_SPAN : (Lex.pos * Lex.pos), FULL_SPAN : (Lex.pos * Lex.pos)) = 
   (  (AST.opAND, relative_expression) )
 fun logical_expression_PROD_1_SUBRULE_1_PROD_2_ACT (Operator_OR, relative_expression, Operator_OR_SPAN : (Lex.pos * Lex.pos), relative_expression_SPAN : (Lex.pos * Lex.pos), FULL_SPAN : (Lex.pos * Lex.pos)) = 
@@ -220,10 +220,10 @@ fun postfix_expression_PROD_1_SUBRULE_1_PROD_2_ACT (Operator_LP, Operator_RP, pr
   (  AST.Funcall (primary_expression, expression_list) )
 fun postfix_expression_PROD_1_ACT (SR, primary_expression, SR_SPAN : (Lex.pos * Lex.pos), primary_expression_SPAN : (Lex.pos * Lex.pos), FULL_SPAN : (Lex.pos * Lex.pos)) = 
   ( 
-		case SR of
-			NONE      => primary_expression
-		  | SOME expr => expr
-	)
+        case SR of
+            NONE      => primary_expression
+          | SOME expr => expr
+    )
 fun primary_expression_PROD_1_ACT (VarName, VarName_SPAN : (Lex.pos * Lex.pos), FULL_SPAN : (Lex.pos * Lex.pos)) = 
   (  AST.Identifier VarName )
 fun primary_expression_PROD_2_ACT (Number, Number_SPAN : (Lex.pos * Lex.pos), FULL_SPAN : (Lex.pos * Lex.pos)) = 

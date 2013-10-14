@@ -187,8 +187,8 @@ fun yyAction33 (strm, lastMatch : yymatch) = let
       in
         yystrm := strm;
           print("error (pos:" ^ (AntlrStreamPos.toString yysm yypos) ^
-				  "): Ignore unrecognized character '" ^ yytext ^ "'\n");
-			continue() 
+                  "): Ignore unrecognized character '" ^ yytext ^ "'\n");
+            continue() 
       end
 fun yyQ29 (strm, lastMatch : yymatch) = (case (yygetc(strm))
        of NONE => yyAction8(strm, yyNO_MATCH)
@@ -1480,58 +1480,58 @@ fun yyQ0 (strm, lastMatch : yymatch) = (case (yygetc(strm))
                 end
               else yystuck(lastMatch)
         | SOME(inp, strm') =>
-            if inp = 0wx3F
-              then yyQ1(strm', lastMatch)
-            else if inp < 0wx3F
-              then if inp = 0wx2A
-                  then yyQ7(strm', lastMatch)
-                else if inp < 0wx2A
-                  then if inp = 0wx23
-                      then yyQ3(strm', lastMatch)
-                    else if inp < 0wx23
-                      then if inp = 0wxB
-                          then yyQ1(strm', lastMatch)
-                        else if inp < 0wxB
-                          then if inp <= 0wx8
+            if inp = 0wx3E
+              then yyQ17(strm', lastMatch)
+            else if inp < 0wx3E
+              then if inp = 0wx29
+                  then yyQ6(strm', lastMatch)
+                else if inp < 0wx29
+                  then if inp = 0wx21
+                      then yyQ1(strm', lastMatch)
+                    else if inp < 0wx21
+                      then if inp = 0wxD
+                          then yyQ2(strm', lastMatch)
+                        else if inp < 0wxD
+                          then if inp = 0wx9
+                              then yyQ2(strm', lastMatch)
+                            else if inp < 0wx9
                               then yyQ1(strm', lastMatch)
-                              else yyQ2(strm', lastMatch)
+                            else if inp <= 0wxA
+                              then yyQ2(strm', lastMatch)
+                              else yyQ1(strm', lastMatch)
                         else if inp = 0wx20
                           then yyQ2(strm', lastMatch)
                           else yyQ1(strm', lastMatch)
-                    else if inp = 0wx26
-                      then yyQ1(strm', lastMatch)
-                    else if inp < 0wx26
-                      then if inp = 0wx24
-                          then yyQ1(strm', lastMatch)
-                          else yyQ4(strm', lastMatch)
+                    else if inp = 0wx25
+                      then yyQ4(strm', lastMatch)
+                    else if inp < 0wx25
+                      then if inp = 0wx23
+                          then yyQ3(strm', lastMatch)
+                          else yyQ1(strm', lastMatch)
                     else if inp = 0wx28
                       then yyQ5(strm', lastMatch)
-                    else if inp = 0wx29
-                      then yyQ6(strm', lastMatch)
                       else yyQ1(strm', lastMatch)
-                else if inp = 0wx30
-                  then yyQ12(strm', lastMatch)
-                else if inp < 0wx30
-                  then if inp = 0wx2D
+                else if inp = 0wx2F
+                  then yyQ11(strm', lastMatch)
+                else if inp < 0wx2F
+                  then if inp = 0wx2C
+                      then yyQ9(strm', lastMatch)
+                    else if inp < 0wx2C
+                      then if inp = 0wx2A
+                          then yyQ7(strm', lastMatch)
+                          else yyQ8(strm', lastMatch)
+                    else if inp = 0wx2D
                       then yyQ10(strm', lastMatch)
-                    else if inp < 0wx2D
-                      then if inp = 0wx2B
-                          then yyQ8(strm', lastMatch)
-                          else yyQ9(strm', lastMatch)
-                    else if inp = 0wx2E
-                      then yyQ1(strm', lastMatch)
-                      else yyQ11(strm', lastMatch)
-                else if inp = 0wx3C
-                  then yyQ15(strm', lastMatch)
-                else if inp < 0wx3C
+                      else yyQ1(strm', lastMatch)
+                else if inp = 0wx3B
+                  then yyQ14(strm', lastMatch)
+                else if inp < 0wx3B
                   then if inp = 0wx3A
                       then yyQ13(strm', lastMatch)
-                    else if inp = 0wx3B
-                      then yyQ14(strm', lastMatch)
                       else yyQ12(strm', lastMatch)
-                else if inp = 0wx3D
-                  then yyQ16(strm', lastMatch)
-                  else yyQ17(strm', lastMatch)
+                else if inp = 0wx3C
+                  then yyQ15(strm', lastMatch)
+                  else yyQ16(strm', lastMatch)
             else if inp = 0wx69
               then yyQ24(strm', lastMatch)
             else if inp < 0wx69

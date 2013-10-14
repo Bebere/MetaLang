@@ -6,7 +6,7 @@
 %let word  = [0-9a-zA-Z_];
 %let id    = {alpha}{word}*;
 
-%let whitespace = [ \n\t];
+%let whitespace = [ \r\n\t];
 %let comments   = #[^\n]*;
 
 
