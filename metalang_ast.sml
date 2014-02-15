@@ -5,7 +5,8 @@ structure MetaLangAST = struct
 		 and Statement = 
 			 ValBinding of string * Expression |
 			 DatatypeBinding of string * string list |
-			 FunBinding of string * FunctionDefinition list
+			 FunBinding of string * FunctionDefinition list |
+             Verbatim of string
 														
 		 and FunctionDefinition = 
 			 FunDef of Expression list * CompoundExpression

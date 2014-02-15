@@ -120,6 +120,7 @@ fun compile_statement (ast, env) =
         AST.ValBinding _ => compile_val_binding (ast, env)
       | AST.DatatypeBinding _ => compile_datatype_binding (ast, env)
       | AST.FunBinding _ => compile_fun_binding (ast, env)
+      | AST.Verbatim verb => ((verb, ""), env)
 
 
 and compile_val_binding (ast, env) = 

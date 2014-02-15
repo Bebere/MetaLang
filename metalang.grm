@@ -17,7 +17,8 @@
         Operator_MULT ("*") | Operator_ADD ("+") | Operator_SUB ("-") | Operator_DIV ("/") | Operator_MOD ("%") |
         Operator_COMMA (",") | Operator_GET ("::") | 
         Operator_LP ("(") | Operator_RP (")") |
-        SEMICOLON (";")
+        SEMICOLON (";") |
+        Verbatim of string
 ;
 
 %keywords "fun", "val", "if", "then", "else", "datatype", "of";
@@ -32,7 +33,7 @@
 stmts : (statement)* ;
 
 statement
-    : (datatype_binding | val_binding | function_definition)
+    : (datatype_binding | val_binding | function_definition | verbatim)
     ;
 
 datatype_binding
@@ -50,6 +51,9 @@ function_definition
             ("|" "(" expression_list ")" "=" compound_expression 
               => (AST.FunDef (expression_list, compound_expression)) )*
             => ( AST.FunBinding (VarName, AST.FunDef(expression_list, compound_expression) :: SR) ) ;
+
+verbatim
+    : Verbatim => (AST.Verbatim Verbatim) ;
 
 
 expression 

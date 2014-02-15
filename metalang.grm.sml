@@ -2,6 +2,7 @@ structure
 MetaLangTokens = struct
 
     datatype token = EOF
+      | Verbatim of string
       | SEMICOLON
       | Operator_RP
       | Operator_LP
@@ -39,6 +40,7 @@ MetaLangTokens = struct
     fun toString tok =
 (case (tok)
  of (EOF) => "EOF"
+  | (Verbatim(_)) => "Verbatim"
   | (SEMICOLON) => ";"
   | (Operator_RP) => ")"
   | (Operator_LP) => "("
@@ -74,6 +76,7 @@ MetaLangTokens = struct
     fun isKW tok =
 (case (tok)
  of (EOF) => false
+  | (Verbatim(_)) => false
   | (SEMICOLON) => false
   | (Operator_RP) => false
   | (Operator_LP) => false
@@ -140,6 +143,8 @@ fun function_definition_PROD_1_SUBRULE_1_PROD_1_ACT (VarName, Operator_EQ, Opera
   ( AST.FunDef (expression_list, compound_expression))
 fun function_definition_PROD_1_ACT (SR, VarName, Operator_EQ, Operator_LP, Operator_RP, Keyword_fun, compound_expression, expression_list, SR_SPAN : (Lex.pos * Lex.pos), VarName_SPAN : (Lex.pos * Lex.pos), Operator_EQ_SPAN : (Lex.pos * Lex.pos), Operator_LP_SPAN : (Lex.pos * Lex.pos), Operator_RP_SPAN : (Lex.pos * Lex.pos), Keyword_fun_SPAN : (Lex.pos * Lex.pos), compound_expression_SPAN : (Lex.pos * Lex.pos), expression_list_SPAN : (Lex.pos * Lex.pos), FULL_SPAN : (Lex.pos * Lex.pos)) = 
   (  AST.FunBinding (VarName, AST.FunDef(expression_list, compound_expression) :: SR) )
+fun verbatim_PROD_1_ACT (Verbatim, Verbatim_SPAN : (Lex.pos * Lex.pos), FULL_SPAN : (Lex.pos * Lex.pos)) = 
+  ( AST.Verbatim Verbatim)
 fun expression_PROD_2_ACT (expression, argument_list, Operator_EQ, Operator_LP, Operator_RP, Operator_LAMBDA, expression_SPAN : (Lex.pos * Lex.pos), argument_list_SPAN : (Lex.pos * Lex.pos), Operator_EQ_SPAN : (Lex.pos * Lex.pos), Operator_LP_SPAN : (Lex.pos * Lex.pos), Operator_RP_SPAN : (Lex.pos * Lex.pos), Operator_LAMBDA_SPAN : (Lex.pos * Lex.pos), FULL_SPAN : (Lex.pos * Lex.pos)) = 
   (  AST.Lambda (argument_list, expression) )
 fun expression_PROD_3_ACT (expression, compound_expression1, compound_expression2, Keyword_else, Keyword_then, Keyword_if, expression_SPAN : (Lex.pos * Lex.pos), compound_expression1_SPAN : (Lex.pos * Lex.pos), compound_expression2_SPAN : (Lex.pos * Lex.pos), Keyword_else_SPAN : (Lex.pos * Lex.pos), Keyword_then_SPAN : (Lex.pos * Lex.pos), Keyword_if_SPAN : (Lex.pos * Lex.pos), FULL_SPAN : (Lex.pos * Lex.pos)) = 
@@ -253,6 +258,10 @@ fun unwrap (ret, strm, repairs) = (ret, strm, repairs)
           in try prods end
 fun matchEOF strm = (case (lex(strm))
  of (Tok.EOF, span, strm') => ((), span, strm')
+  | _ => fail()
+(* end case *))
+fun matchVerbatim strm = (case (lex(strm))
+ of (Tok.Verbatim(x), span, strm') => (x, span, strm')
   | _ => fail()
 (* end case *))
 fun matchSEMICOLON strm = (case (lex(strm))
@@ -382,6 +391,13 @@ fun matchVarName strm = (case (lex(strm))
 
 val (stmts_NT) = 
 let
+fun verbatim_NT (strm) = let
+      val (Verbatim_RES, Verbatim_SPAN, strm') = matchVerbatim(strm)
+      val FULL_SPAN = (#1(Verbatim_SPAN), #2(Verbatim_SPAN))
+      in
+        (UserCode.verbatim_PROD_1_ACT (Verbatim_RES, Verbatim_SPAN : (Lex.pos * Lex.pos), FULL_SPAN : (Lex.pos * Lex.pos)),
+          FULL_SPAN, strm')
+      end
 fun argument_list_NT (strm) = let
       fun argument_list_PROD_1_SUBRULE_1_NT (strm) = let
             val (VarName_RES, VarName_SPAN, strm') = matchVarName(strm)
@@ -485,14 +501,22 @@ fun statement_NT (strm) = let
                   in
                     ((function_definition_RES), FULL_SPAN, strm')
                   end
+            fun statement_PROD_1_SUBRULE_1_PROD_4 (strm) = let
+                  val (verbatim_RES, verbatim_SPAN, strm') = verbatim_NT(strm)
+                  val FULL_SPAN = (#1(verbatim_SPAN), #2(verbatim_SPAN))
+                  in
+                    ((verbatim_RES), FULL_SPAN, strm')
+                  end
             in
               (case (lex(strm))
-               of (Tok.Keyword_fun, _, strm') =>
-                    statement_PROD_1_SUBRULE_1_PROD_3(strm)
-                | (Tok.Keyword_datatype, _, strm') =>
-                    statement_PROD_1_SUBRULE_1_PROD_1(strm)
+               of (Tok.Verbatim(_), _, strm') =>
+                    statement_PROD_1_SUBRULE_1_PROD_4(strm)
                 | (Tok.Keyword_val, _, strm') =>
                     statement_PROD_1_SUBRULE_1_PROD_2(strm)
+                | (Tok.Keyword_datatype, _, strm') =>
+                    statement_PROD_1_SUBRULE_1_PROD_1(strm)
+                | (Tok.Keyword_fun, _, strm') =>
+                    statement_PROD_1_SUBRULE_1_PROD_3(strm)
                 | _ => fail()
               (* end case *))
             end
@@ -546,6 +570,7 @@ and compound_expression_NT (strm) = let
                    of (Tok.Keyword_fun, _, strm') => true
                     | (Tok.Keyword_val, _, strm') => true
                     | (Tok.Keyword_datatype, _, strm') => true
+                    | (Tok.Verbatim(_), _, strm') => true
                     | _ => false
                   (* end case *))
             val (SR_RES, SR_SPAN, strm') = EBNF.posclos(compound_expression_PROD_1_SUBRULE_1_PROD_1_SUBRULE_1_PRED, compound_expression_PROD_1_SUBRULE_1_PROD_1_SUBRULE_1_NT, strm)
@@ -558,6 +583,7 @@ and compound_expression_NT (strm) = let
              of (Tok.Keyword_fun, _, strm') => true
               | (Tok.Keyword_val, _, strm') => true
               | (Tok.Keyword_datatype, _, strm') => true
+              | (Tok.Verbatim(_), _, strm') => true
               | _ => false
             (* end case *))
       val (SR_RES, SR_SPAN, strm') = EBNF.optional(compound_expression_PROD_1_SUBRULE_1_PRED, compound_expression_PROD_1_SUBRULE_1_NT, strm)
@@ -1024,6 +1050,7 @@ fun stmts_NT (strm) = let
              of (Tok.Keyword_fun, _, strm') => true
               | (Tok.Keyword_val, _, strm') => true
               | (Tok.Keyword_datatype, _, strm') => true
+              | (Tok.Verbatim(_), _, strm') => true
               | _ => false
             (* end case *))
       val (SR_RES, SR_SPAN, strm') = EBNF.closure(stmts_PROD_1_SUBRULE_1_PRED, stmts_PROD_1_SUBRULE_1_NT, strm)

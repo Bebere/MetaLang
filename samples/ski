@@ -1,0 +1,64 @@
+@@
+#include <iostream>
+#include "metalang.hpp"
+@@
+
+fun I (x) = x
+fun K (x) = \(y) = x
+fun S (x) = \(y) = (\(z) = (x(z))(y(z)))
+
+val T = K
+val F = S(K)
+val NOT = (F)(T)
+
+val OR = T
+val AND = F
+
+val Succ = S ((S(K(S)))(K))
+val Zero = K(I)
+val One = Succ(Zero)
+val Two = Succ(One)
+val Three = Succ(Two)
+val Four = Succ(Three)
+val Five = Succ(Four)
+val Six = Succ(Five)
+
+val Plus = \(n) = (\(m) = (m(Succ))(n))
+val Mult = \(m) = (\(n) = (\(f) = m(n(f))))
+val Expo = \(m) = \(n) = n(m)
+
+val Five2 = (Plus(Two))(Three)
+val Six2 = (Plus(Two))(Four)
+val Six3 = (Mult(Two))(Three)
+val Four2 = (Expo(Two))(Two)
+
+@@
+template <typename numeral>
+struct church_to_int {
+
+        struct f {
+                template <typename x, typename __dummy>
+                struct apply {};
+
+                template <int x, typename __dummy>
+                struct apply<meta_integer<x>, __dummy> {
+                        typedef meta_integer<x + 1> value;
+                };
+        };
+
+        static const int value = numeral::template apply<f, __dummy_arg>::value::
+                template apply<meta_integer<0>, __dummy_arg>::value::value;
+};
+
+
+int main(int argc, char *argv[])
+{
+        std::cout << church_to_int<Five>::value << std::endl;
+        std::cout << church_to_int<Five2>::value << std::endl;
+        std::cout << church_to_int<Six>::value << std::endl;
+        std::cout << church_to_int<Six2>::value << std::endl;
+        std::cout << church_to_int<Six3>::value << std::endl;
+        std::cout << church_to_int<Four2>::value << std::endl;
+        return 0;
+}
+@@

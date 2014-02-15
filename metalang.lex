@@ -9,6 +9,7 @@
 %let whitespace = [ \r\n\t];
 %let comments   = #[^\n]*;
 
+%states VERBATIM;
 
 %defs (
     structure Token = MetaLangTokens;
@@ -47,6 +48,11 @@
      "("   => (Token.Operator_LP);
      ")"   => (Token.Operator_RP);
      ";"   => (Token.SEMICOLON);
+
+     (* Verbatim *)
+     <INITIAL>"@@"  => (YYBEGIN VERBATIM; skip());
+     <VERBATIM>"@@" => (YYBEGIN INITIAL; skip());
+     <VERBATIM>[^@]* => (Token.Verbatim yytext);
 
      (* Identifier, integer literals *)
      {id}  => (Token.VarName (yytext));
