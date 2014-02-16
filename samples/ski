@@ -14,6 +14,7 @@ val NOT = (F)(T)
 val OR = T
 val AND = F
 
+fun SKI2Int (n) = (n(\(x) = x + 1))(0)
 val Succ = S ((S(K(S)))(K))
 val Zero = K(I)
 val One = Succ(Zero)
@@ -27,38 +28,29 @@ val Plus = \(n) = (\(m) = (m(Succ))(n))
 val Mult = \(m) = (\(n) = (\(f) = m(n(f))))
 val Expo = \(m) = \(n) = n(m)
 
-val Five2 = (Plus(Two))(Three)
-val Six2 = (Plus(Two))(Four)
-val Six3 = (Mult(Two))(Three)
-val Four2 = (Expo(Two))(Two)
+val Int_Two_Plus_Three = SKI2Int( (Plus(Two))(Three) )
+val Int_Two_Plus_Four = SKI2Int( (Plus(Two))(Four) )
+val Int_Two_Mult_Three = SKI2Int( (Mult(Two))(Three) )
+val Int_Four_Mult_Three = SKI2Int( (Mult(Four))(Three) )
+val Int_Two_Exp_Two = SKI2Int( (Expo(Two))(Two) )
+val Int_Three_Exp_Two = SKI2Int( (Expo(Three))(Two) )
+
+fun SKI2Bool (x) = (x(1))(0)
+val SKSK = SKI2Bool( ((S(K))(S))(K) )
+val SKIISK = SKI2Bool( ((S(K))(I(I(S))))(K) )
 
 @@
-template <typename numeral>
-struct church_to_int {
-
-        struct f {
-                template <typename x, typename __dummy>
-                struct apply {};
-
-                template <int x, typename __dummy>
-                struct apply<meta_integer<x>, __dummy> {
-                        typedef meta_integer<x + 1> value;
-                };
-        };
-
-        static const int value = numeral::template apply<f, __dummy_arg>::value::
-                template apply<meta_integer<0>, __dummy_arg>::value::value;
-};
-
 
 int main(int argc, char *argv[])
 {
-        std::cout << church_to_int<Five>::value << std::endl;
-        std::cout << church_to_int<Five2>::value << std::endl;
-        std::cout << church_to_int<Six>::value << std::endl;
-        std::cout << church_to_int<Six2>::value << std::endl;
-        std::cout << church_to_int<Six3>::value << std::endl;
-        std::cout << church_to_int<Four2>::value << std::endl;
+        std::cout << Int_Two_Plus_Three::value << std::endl;
+        std::cout << Int_Two_Plus_Four::value << std::endl;
+        std::cout << Int_Two_Mult_Three::value << std::endl;
+        std::cout << Int_Four_Mult_Three::value << std::endl;
+        std::cout << Int_Two_Exp_Two::value << std::endl;
+        std::cout << Int_Three_Exp_Two::value << std::endl;
+        std::cout << SKSK::value << std::endl;
+        std::cout << SKIISK::value << std::endl;
         return 0;
 }
 @@
