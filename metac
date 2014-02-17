@@ -1,2 +1,18 @@
 #!/bin/sh
-sml @SMLload=metac.x86-darwin $1 $2 $3 $4 $5 $6 $7 $8
+
+arch=x86
+
+case `uname` in
+    "Linux" )
+        host=linux
+        ;;
+    "Darwin" )
+        host=darwin
+        ;;
+    *)
+        echo "unrecognized host operating system"
+        exit -1
+        ;;
+esac
+
+sml @SMLload=metac.$arch-$host $1 $2 $3 $4 $5 $6 $7 $8
